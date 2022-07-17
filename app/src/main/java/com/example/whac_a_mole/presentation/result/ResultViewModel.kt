@@ -16,7 +16,7 @@ class ResultViewModel @Inject constructor(
     state: SavedStateHandle
 ): ViewModel() {
 
-    val bestScore = playerScoreStorage.getUserScore()
+    val bestScore get() = playerScoreStorage.getUserScore()
     val playerScore = state.get<Int>(KEY_PLAYER_SCORE) ?: 0
 
     private val _uiChannel = Channel<ResultUiEffect>()

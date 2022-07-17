@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".presentation.game_field.GameFieldFragment">
+
+    <TextView
+        android:id="@+id/tvScore"
+        style="@style/Body"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/top_margin_small"
+        android:text="@string/game_score"
+        app:layout_constraintStart_toStartOf="@+id/verticalLeftGuideline"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tvGameTime"
+        style="@style/Body"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/top_margin_small"
+        android:text="@string/time_left"
+        app:layout_constraintStart_toStartOf="@+id/verticalLeftGuideline"
+        app:layout_constraintTop_toBottomOf="@+id/tvScore" />
+
+    <View
+        android:id="@+id/divider"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/game_field_divider_height"
+        android:layout_marginTop="@dimen/top_margin_small"
+        android:background="?android:attr/listDivider"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvGameTime" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:visibility="visible"
+        app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/verticalRightGuideline"
+        app:layout_constraintStart_toStartOf="@+id/verticalLeftGuideline"
+        app:layout_constraintTop_toBottomOf="@+id/divider"
+        app:spanCount="3" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/verticalLeftGuideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="@dimen/guideline_vertical_margin" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/verticalRightGuideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_end="@dimen/guideline_vertical_margin" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">Whac-A-Mole</string>
+
+    <string name="start_game">Start game</string>
+    <string name="play_again">Play again</string>
+    <string name="menu">Menu</string>
+    <string name="game_score">Your score: %1$s</string>
+    <string name="best_score">Best score: %1$s</string>
+    <string name="time_left">Time left: %1$s</string>
+    <string name="game_rules">
+        Rules: Nine holes in the play area are filled with small moles, which pop up at random. Points are scored by whacking each mole as it appears. The game will end when the timer runs out.</string>
+    <string name="game_name">Whac-A-Mole</string>
+</resources>

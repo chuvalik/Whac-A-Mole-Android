@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="guideline_vertical_margin">20dp</dimen>
+    <dimen name="game_field_divider_height">4dp</dimen>
+    <dimen name="top_margin_small">16dp</dimen>
+    <dimen name="game_item_width">100dp</dimen>
+    <dimen name="game_item_height">100dp</dimen>
+    <dimen name="game_item_height_medium">50dp</dimen>
+    <dimen name="top_margin_medium">32dp</dimen>
+    <dimen name="margin_top_big">64dp</dimen>
+</resources>

@@ -10,4 +10,14 @@
         <item name="android:textColor">@color/black</item>
         <item name="android:textSize">18sp</item>
     </style>
+
+    <style name="DefaultGameFieldStyle">
+        <item name="moleColor">@color/white</item>
+        <item name="holeColor">@color/black</item>
+        <item name="gridColor">#008800</item>
+    </style>
+
+    <style name="GlobalGameFieldStyle" parent="DefaultGameFieldStyle">
+        <item name="moleColor">@color/cardview_shadow_end_color</item>
+    </style>
 </resources>

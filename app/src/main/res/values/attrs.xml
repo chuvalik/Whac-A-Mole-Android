@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <declare-styleable name="GameFieldView">
+        <attr name="moleColor" format="color" />
+        <attr name="holeColor" format="color" />
+        <attr name="gridColor" format="color" />
+    </declare-styleable>
+
+    <attr name="gameField" format="reference" />
+
+
+</resources>

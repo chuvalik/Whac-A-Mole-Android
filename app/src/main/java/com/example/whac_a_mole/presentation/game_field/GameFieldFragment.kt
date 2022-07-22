@@ -1,7 +1,6 @@
 package com.example.whac_a_mole.presentation.game_field
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,8 +8,8 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import com.example.whac_a_mole.R
 import com.example.whac_a_mole.databinding.FragmentGameFieldBinding
+import com.example.whac_a_mole.presentation.game_field.model.Cell
 import com.example.whac_a_mole.presentation.game_field.model.GameFieldState
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
@@ -36,10 +35,23 @@ class GameFieldFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        setupAdapter()
-
         observeUiState()
         observeUiEffect()
+
+        setActionListenerToGameField()
+
+    }
+
+    private fun setActionListenerToGameField() {
+        binding.gameField.actionListener = { row, column, field ->
+
+            when (field.getCell(row, column)) {
+                Cell.MOLE -> {
+                    viewModel.clickedOnTheMole()
+                }
+                else -> Unit
+            }
+        }
     }
 
     private fun observeUiState() {
@@ -49,17 +61,11 @@ class GameFieldFragment : Fragment() {
     }
 
     private fun processUiState(state: GameFieldState) {
-        binding.tvScore.text = getString(R.string.game_score, state.playerScore.toString())
-        binding.tvGameTime.text = getString(R.string.time_left, state.currentTime.toString())
-
-        adapter?.submitList(state.gameField)
-        adapter?.notifyDataSetChanged()
+        binding.gameField.gameField = state.gameField
+        binding.tvScore.text = state.playerScore.toString()
+        binding.tvGameTime.text = state.currentTime.toString()
     }
 
-    private fun setupAdapter() {
-        adapter = GameFieldAdapter { viewModel.clickedOnTheMole() }
-        binding.recyclerView.adapter = adapter
-    }
 
     private fun observeUiEffect() {
         viewLifecycleOwner.lifecycleScope.launchWhenStarted {

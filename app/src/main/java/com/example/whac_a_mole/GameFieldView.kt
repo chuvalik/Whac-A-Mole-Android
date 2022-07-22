@@ -9,6 +9,7 @@ import android.util.AttributeSet
 import android.util.TypedValue
 import android.view.MotionEvent
 import android.view.View
+import android.view.View.resolveSize
 import com.example.whac_a_mole.presentation.game_field.model.Cell
 import kotlin.math.max
 import kotlin.math.min
@@ -16,11 +17,11 @@ import kotlin.properties.Delegates
 
 typealias OnCellActionListener = (row: Int, column: Int, field: GameField) -> Unit
 
-class GameFieldView(
+class GameFieldView @JvmOverloads constructor(
     context: Context,
-    attributeSet: AttributeSet?,
-    defStyleAttr: Int,
-    defStyleRes: Int
+    attributeSet: AttributeSet? = null,
+    defStyleAttr: Int = 0,
+    defStyleRes: Int = 0
 ) : View(context, attributeSet, defStyleAttr, defStyleRes) {
 
     var gameField: GameField? = null
@@ -33,13 +34,25 @@ class GameFieldView(
             invalidate() // redraw ->
         }
 
-    private var moleColor: Int by Delegates.notNull()
-    private var holeColor: Int by Delegates.notNull()
-    private var gridColor: Int by Delegates.notNull()
+    private val molePaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+        color = Color.WHITE
+        style = Paint.Style.FILL
+    }
 
-    private lateinit var molePaint: Paint
-    private lateinit var holePaint: Paint
-    private lateinit var gridPaint: Paint
+    private val holePaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+        color = Color.BLACK
+        style = Paint.Style.FILL
+    }
+
+    private val gridPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+        color = Color.GREEN
+        style = Paint.Style.STROKE
+        strokeWidth = TypedValue.applyDimension(
+            TypedValue.COMPLEX_UNIT_DIP,
+            GRID_STROKE_WIDTH,
+            resources.displayMetrics
+        )
+    }
 
     private var cellSize: Float = 0f
     private var cellPadding: Float = 0f
@@ -51,66 +64,11 @@ class GameFieldView(
 
     var actionListener: OnCellActionListener? = null
 
-    constructor(context: Context, attributeSet: AttributeSet?, defStyleAttr: Int) : this(
-        context,
-        attributeSet,
-        defStyleAttr,
-        R.style.DefaultGameFieldStyle
-    )
-
-    constructor(context: Context, attributeSet: AttributeSet?) : this(
-        context,
-        attributeSet,
-        R.attr.gameField
-    )
-
-    constructor(context: Context) : this(context, null)
-
     init {
-        if (attributeSet != null) initAttributes(attributeSet, defStyleAttr, defStyleRes)
-        else initDefaultColors()
-        initPaints()
+        isFocusable = true
+        isClickable = true
     }
 
-    private fun initAttributes(attributeSet: AttributeSet, defStyleAttr: Int, defStyleRes: Int) {
-        val typedArray = context.obtainStyledAttributes(
-            attributeSet,
-            R.styleable.GameFieldView,
-            defStyleAttr,
-            defStyleRes
-        )
-
-        moleColor = typedArray.getColor(R.styleable.GameFieldView_moleColor, DEFAULT_MOLE_COLOR)
-        holeColor = typedArray.getColor(R.styleable.GameFieldView_holeColor, DEFAULT_HOLE_COLOR)
-        gridColor = typedArray.getColor(R.styleable.GameFieldView_gridColor, DEFAULT_GRID_COLOR)
-
-        typedArray.recycle()
-    }
-
-    private fun initDefaultColors() {
-        moleColor = DEFAULT_MOLE_COLOR
-        holeColor = DEFAULT_HOLE_COLOR
-        gridColor = DEFAULT_GRID_COLOR
-    }
-
-    private fun initPaints() {
-        molePaint = Paint(Paint.ANTI_ALIAS_FLAG)
-        molePaint.color = moleColor
-        molePaint.style = Paint.Style.FILL
-
-        holePaint = Paint(Paint.ANTI_ALIAS_FLAG)
-        holePaint.color = holeColor
-        holePaint.style = Paint.Style.FILL
-
-        gridPaint = Paint(Paint.ANTI_ALIAS_FLAG)
-        gridPaint.color = gridColor
-        gridPaint.style = Paint.Style.STROKE
-        gridPaint.strokeWidth = TypedValue.applyDimension(
-            TypedValue.COMPLEX_UNIT_DIP,
-            3F,
-            resources.displayMetrics
-        )
-    }
 
     override fun onAttachedToWindow() {
         super.onAttachedToWindow()
@@ -127,7 +85,7 @@ class GameFieldView(
         val minHeight = suggestedMinimumHeight + paddingTop + paddingBottom
 
         val desiredCellSizeInPixels = TypedValue.applyDimension(
-            TypedValue.COMPLEX_UNIT_DIP, 100F, resources.displayMetrics
+            TypedValue.COMPLEX_UNIT_DIP, CELL_SIZE, resources.displayMetrics
         ).toInt()
 
         val rows = gameField?.rows ?: 0
@@ -255,9 +213,6 @@ class GameFieldView(
         val field = this.gameField ?: return false
         when (event.action) {
             MotionEvent.ACTION_DOWN -> {
-                return true
-            }
-            MotionEvent.ACTION_UP -> {
                 val row = getRow(event)
                 val column = getColumn(event)
                 if (row >= 0 && column >= 0 && row < field.rows && column < field.columns) {
@@ -265,6 +220,9 @@ class GameFieldView(
                     return true
                 }
                 return false
+            }
+            MotionEvent.ACTION_UP -> {
+                return true
             }
         }
 
@@ -280,8 +238,8 @@ class GameFieldView(
     }
 
     private companion object {
-        const val DEFAULT_MOLE_COLOR = Color.WHITE
-        const val DEFAULT_HOLE_COLOR = Color.BLACK
-        const val DEFAULT_GRID_COLOR = Color.GREEN
+        const val GRID_STROKE_WIDTH = 2F
+
+        const val CELL_SIZE = 100F
     }
 }
